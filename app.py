@@ -77,14 +77,14 @@ def get_shift_status(target_date, anchor_date, vacation_ranges):
             "status": f"Work Day (Day {cycle_index + 1} of 4)",
             "cycle_day": cycle_index + 1,
             "is_work": True,
-            "badge": f"🧑‍🚒 Work Day (Day {cycle_index + 1} of 4) 👮‍♀️",
+            "badge": f"🧑‍🚒 Work Day 👮‍♀️",
         }
     else:
         return {
             "status": f"Off Day (Day {cycle_index - 3} of 4)",
             "cycle_day": cycle_index - 3,
             "is_work": False,
-            "badge": f"🏠 ➔ Off Day (Day {cycle_index - 3} of 4) 🐕",
+            "badge": f"🏠 👉 Off Day 🐕",
         }
 
 
