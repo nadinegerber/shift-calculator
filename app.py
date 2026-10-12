@@ -1,7 +1,7 @@
 # ==============================================================================
 # 4-DAY ON / 4-DAY OFF SHIFT SCHEDULE WEB APPLICATION (STREAMLIT)
 # ==============================================================================
-# This application integrates our Stage 1 mathematical calculation engine
+# This application integrates our mathematical calculation engine
 # with Streamlit's visual web framework to present an interactive shift dashboard.
 # ==============================================================================
 
@@ -23,7 +23,7 @@ st.set_page_config(
 
 
 # ------------------------------------------------------------------------------
-# SECTION 2: CORE CALCULATION ENGINE (STAGE 1 CODE REUSED)
+# SECTION 2: CORE CALCULATION ENGINE
 # ------------------------------------------------------------------------------
 def is_date_in_vacation(target_date, vacation_ranges):
     """
@@ -71,20 +71,20 @@ def get_shift_status(target_date, anchor_date, vacation_ranges):
     # Apply modulo 8 arithmetic to find position in the repeating shift cycle
     cycle_index = elapsed_days % 8
 
-    # Map remainder index to work or off status
+    # Map remainder index to work or off status with customized emojis
     if cycle_index < 4:
         return {
             "status": f"Work Day (Day {cycle_index + 1} of 4)",
             "cycle_day": cycle_index + 1,
             "is_work": True,
-            "badge": "💼 Work Day",
+            "badge": f"🧑‍🚒 Work Day (Day {cycle_index + 1} of 4) 👮‍♀️",
         }
     else:
         return {
             "status": f"Off Day (Day {cycle_index - 3} of 4)",
             "cycle_day": cycle_index - 3,
             "is_work": False,
-            "badge": "🏠 Off Day",
+            "badge": f"🏠 ➔ Off Day (Day {cycle_index - 3} of 4) 🐕",
         }
 
 
@@ -117,12 +117,11 @@ def generate_monthly_schedule(year, month, anchor_date, vacation_ranges):
             vacation_ranges=vacation_ranges,
         )
 
-        # Append formatted dictionary record to list with capitalized headers
+        # Append formatted dictionary record to list
         monthly_records.append({
-            "Date": current_date.strftime("%Y-%m-%d"),
-            "Day Name": current_date.strftime("%A"),
-            "Status": shift_info["badge"],
-            "Shift Detail": shift_info["status"],
+            "Date": current_date.strftime("%d %B %Y"),  # e.g., '13 October 2026'
+            "Day Name": current_date.strftime("%A"),     # e.g., 'Tuesday'
+            "Status": shift_info["badge"],               # Combined emoji and status description
         })
 
     return monthly_records
@@ -137,7 +136,7 @@ def generate_monthly_schedule(year, month, anchor_date, vacation_ranges):
 
 st.sidebar.header("⚙️ Schedule Settings")
 
-# Sidebar Control 1: Anchor Date Selector (Set to October 13, 2026 based on brother's shift)
+# Sidebar Control 1: Anchor Date Selector (Set to October 13, 2026)
 default_anchor = datetime.date(2026, 10, 13)
 anchor_date = st.sidebar.date_input(
     label="Anchor Date (Work Day 1):",
@@ -202,8 +201,6 @@ schedule_data = generate_monthly_schedule(
 )
 
 # Display High-Level Summary Metrics
-# How: st.columns(3) splits the main display into 3 side-by-side metric cards.
-# Why: Gives immediate total counts of work, off, and vacation days for the month.
 col1, col2, col3 = st.columns(3)
 
 work_days_count = sum(
@@ -224,11 +221,28 @@ st.markdown("---")
 month_name = datetime.date(2000, selected_month, 1).strftime("%B")
 st.subheader(f"Schedule for {month_name} {selected_year}")
 
-# How: We convert our list of Python dictionaries into a Pandas DataFrame
-# and assign the "Date" column as the table index using .set_index("Date").
-# Why: This completely removes the default numeric index column (0, 1, 2...)
-# and places the Date column at the very front of the display table.
+# Convert list of dictionaries into a Pandas DataFrame and set the Date column as the index
 df_schedule = pd.DataFrame(schedule_data).set_index("Date")
 
-# Render the modified table in the web application interface
-st.table(df_schedule)
+# Styling Function: Apply custom background colors to distinguish work, off, and vacation rows.
+def color_shift_rows(row):
+    if "Work Day" in row["Status"]:
+        # Soft blue tint for work days
+        return ['background-color: rgba(0, 102, 204, 0.12)'] * len(row)
+    elif "Vacation" in row["Status"]:
+        # Soft warm amber/orange tint for vacation days
+        return ['background-color: rgba(255, 140, 0, 0.15)'] * len(row)
+    else:
+        # Soft neutral gray tint for off days
+        return ['background-color: rgba(128, 128, 128, 0.08)'] * len(row)
+
+# Apply styling to the dataframe
+styled_schedule = df_schedule.style.apply(color_shift_rows, axis=1)
+
+# Dynamically calculate height so all rows fit perfectly without internal scrolling
+# (Number of rows + header row) * row height pixels + padding
+#table_height = (len(schedule_data) + 1) * 38 + 15
+table_height = (len(schedule_data) + 1) * 36
+
+# Render the full-height styled dataframe in the web application interface
+st.dataframe(styled_schedule, use_container_width=True, height=table_height)
