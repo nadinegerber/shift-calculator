@@ -1,11 +1,16 @@
+
+<img width="1600" height="512" alt="shift_calculator_banner" src="https://github.com/user-attachments/assets/dd51a954-4f34-45bc-9a44-132a57083b53" />
+
+
 # 📅 4-On / 4-Off Shift Schedule Web Application
 
 An interactive, mobile-optimized web dashboard built with Streamlit to calculate and display a repeating 4-days-on and 4-days-off work shift schedule. 
+
 Designed specifically for easy viewing on mobile phones and desktop browsers.
 
 <br>
 
----
+
 
 ## ✨ Key Features
 
@@ -21,7 +26,8 @@ Designed specifically for easy viewing on mobile phones and desktop browsers.
 
 <br>
 
----
+
+<br>
 
 ## 🛠️ Tech Stack & Dependencies
 
@@ -33,6 +39,8 @@ Designed specifically for easy viewing on mobile phones and desktop browsers.
 ```text
 streamlit
 ```
+<br>
+<br>
 
 ## 🚀 Running the App Locally
 
@@ -53,8 +61,14 @@ pip install -r requirements.txt
 ```bash
 streamlit run app.py
 ```
+<br>
+<br>
 
 
 ## 🌐 Live Deployment
 
 This application is hosted and deployed live on Streamlit Community Cloud, automatically syncing with the main branch of this GitHub repository.
+
+[View the Live Shift Calculator App](https://chris-benita.streamlit.app/)
+
+
