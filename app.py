@@ -119,7 +119,7 @@ def generate_monthly_schedule(year, month, anchor_date, vacation_ranges):
 
         # Append formatted dictionary record to list
         monthly_records.append({
-            "Date": current_date.strftime("%d %B %Y"),  # e.g., '13 October 2026'
+            "Date": current_date.strftime("%d %b %Y"),  # e.g., '13 October 2026'
             "Day Name": current_date.strftime("%A"),     # e.g., 'Tuesday'
             "Status": shift_info["badge"],               # Combined emoji and status description
         })
