@@ -8,9 +8,9 @@ An interactive, mobile-optimized web dashboard built with Streamlit to calculate
 
 Designed specifically for easy viewing on mobile phones and desktop browsers.
 
+[Shift Calculator App](https://chris-benita.streamlit.app/)
+
 <br>
-
-
 
 ## ✨ Key Features
 
